@@ -10,7 +10,13 @@ For development on local machine, it could easily be build with command ``npm bu
 
 ## Backend
 
-To develop on the backend, just run the ``docker-compose.yml`` file in the ``backend`` folder for development with the proper ``.env`` file.
+Express typescript backend for untitled-converter web app.
+
+For development on local machine, just run dockers using the ``docker-compose.yml`` file in the ``backend`` folder for development with the proper ``.env`` file.
+
+```
+docker-compose up --build -d
+```
 
 ## Linter configuration
 
@@ -27,8 +33,22 @@ Please add the current settings to your vscode user ``settings.json`` file to ma
     ],
 ```
 
+## Backend Unit Tests
+
+To run the unit tests on the backend (located in the ``backend/tests``folder), you can just run the ``run-unit-tests`` script (It will run the postgres docker for having a mock database and launch tests locally using ``npm run test``).
+
+```
+./unit-tests
+```
+
+Coverage will automatically generated in different formats in the ``coverage`` folder.
+
+## API Documentation
+
+Api documentation gets generated automatically each time the backend gets launched in the ``swagger.yaml`` at the root of the ``backend`` folder.
+
 ## Authors
 - [@Alexandre Chetrit](https://github.com/chetrit)
-<!-- - [@Arnaud Issoire](https://github.com/baptisteauduge)
-- [@Richard TBC](https://github.com/emilegurgand)
-- [@Rasmus TBC](https://github.com/orgs/monaliza-epargne/people/jeremyelalouf) -->
+<!-- - [@Arnaud Issoire](https://github.com/username)
+- [@Richard TBC](https://github.com/username)
+- [@Rasmus TBC](https://github.com/username) -->

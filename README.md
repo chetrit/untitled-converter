@@ -20,7 +20,7 @@ docker-compose up --build -d
 
 ## Linter configuration
 
-Please add the current settings to your vscode user ``settings.json`` file to make eslint work properly for both frontend and backend.
+To make linter works properly for both frontend and backend, add the current settings to your vscode user ``settings.json`` file.
 ```json
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
@@ -38,7 +38,7 @@ Please add the current settings to your vscode user ``settings.json`` file to ma
 To run the unit tests on the backend (located in the ``backend/tests``folder), you can just run the ``run-unit-tests`` script (It will run the postgres docker for having a mock database and launch tests locally using ``npm run test``).
 
 ```
-./unit-tests
+./run-unit-tests
 ```
 
 Coverage will automatically generated in different formats in the ``coverage`` folder.

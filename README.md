@@ -51,4 +51,4 @@ Api documentation gets generated automatically each time the backend gets launch
 - [@Alexandre Chetrit](https://github.com/chetrit)
 <!-- - [@Arnaud Issoire](https://github.com/username)
 - [@Richard TBC](https://github.com/username)
-- [@Rasmus TBC](https://github.com/username) -->
+- [Rasmus Wittrock](https://github.com/rwittrock) -->

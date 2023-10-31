@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { PageExample } from 'pages/PageExample/PageExample'
 import { PageNotFound } from 'pages/PageNotFound/PageNotFound'
-import SignIn from 'pages/sing-in/SignIn'
+import SignIn from 'pages/sign-in/SignIn'
 
 const pathToNode: Array<{ path: string, Element: any }> = [
   { path: '/', Element: PageExample },

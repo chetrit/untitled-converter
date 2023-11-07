@@ -4,11 +4,20 @@ import * as fs from 'fs'
 
 const app = express()
 
+/*
+Create bucket to store json files
+Store json files in bucket
+Every hour call lambda endpoint to update rates, call API and update rates in bucket
+Client API calls are given to backend which calls corresponding lambda function:
+	delete: send call to lambda to delete rate
+	post: send call to lambda to add custom rate
+	get: get the rates from bucket
+*/
+
 export async function updateRates (ACCESS_KEY, BASE): Promise<void> {
   console.log('Current directory: ' + process.cwd())
 
   try {
-    // print current directory
     const ratesData: any = await fetchExchangeRates(ACCESS_KEY, BASE)
 
     const customData: any = fs.readFileSync('./src/config/ratesData/customData.json', 'utf-8')

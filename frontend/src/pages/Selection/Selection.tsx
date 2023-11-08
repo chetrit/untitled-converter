@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Curve from 'assets/images/curve.png'
 
 import SearchIcon from '@mui/icons-material/Search'
 import {
@@ -14,7 +15,7 @@ import {
 } from '@mui/material'
 
 // Sample data for currency pairs
-const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD']
+const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB']
 
 const Selection = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -23,10 +24,16 @@ const Selection = () => {
     setSearchQuery(event.target.value)
   }
 
+  const filteredCurrencyPairs = searchQuery
+    ? currencyPairs.filter((pair) =>
+      pair.toLowerCase().includes(searchQuery)
+    )
+    : currencyPairs
+
   return (
     <>
       <AppBar position={'static'}>
-        {/* ... your existing AppBar content ... */}
+        {/* ... AppBar content ... */}
       </AppBar>
       <Box sx={{
         position: 'relative',
@@ -64,7 +71,7 @@ const Selection = () => {
         />
       </Box>
       <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-        {currencyPairs.map((pair) => (
+        {filteredCurrencyPairs.map((pair) => (
           <Card sx={{
             maxWidth: 345,
             m: 2
@@ -74,8 +81,11 @@ const Selection = () => {
             <CardMedia
               component={'img'}
               height={'140'}
-              image={'/path-to-blurred-trading-curve.jpg'} // replace with actual image path
+              image={Curve} // replace with actual image path
               alt={'Trading Curve'}
+              sx={{
+                filter: 'blur(5px)',
+              }}
             />
             <CardContent>
               <Typography variant={'h5'} component={'h2'}>

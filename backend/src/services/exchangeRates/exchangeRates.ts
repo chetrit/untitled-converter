@@ -1,6 +1,7 @@
 import axios from 'axios'
 import express from 'express'
 import * as fs from 'fs'
+import { Int32 } from 'typeorm'
 
 const app = express()
 
@@ -9,9 +10,9 @@ Create bucket to store json files
 Store json files in bucket
 Every hour call lambda endpoint to update rates, call API and update rates in bucket
 Client API calls are given to backend which calls corresponding lambda function:
-	delete: send call to lambda to delete rate
-	post: send call to lambda to add custom rate
-	get: get the rates from bucket
+delete: send call to lambda to delete rate
+post: send call to lambda to add custom rate
+get: get the rates from bucket
 */
 
 export async function updateRates (ACCESS_KEY, BASE): Promise<void> {
@@ -44,6 +45,24 @@ export async function updateRates (ACCESS_KEY, BASE): Promise<void> {
       JSON.stringify(ratesData, null, 2)
     )
     console.log('rates data saved to ratesData.json')
+
+    // check if current hours = 12, if so save all current rates to historicRates.json
+    const date = new Date()
+    const dateString = date.toISOString()
+    const hours: number = date.getHours()
+
+    if (hours !== 12) {
+      const historicRates: any = fs.readFileSync('./src/config/ratesData/historicRates.json', 'utf-8')
+      const parsedHistoricRates: any = JSON.parse(historicRates)
+
+      // add current rates to historicRates with symbol as key and an extra field for the date
+      parsedHistoricRates.dates[dateString] = ratesData.rates
+
+      fs.writeFileSync(
+        './src/config/ratesData/historicRates.json',
+        JSON.stringify(parsedHistoricRates, null, 2)
+      )
+    }
   } catch (error: any) {
     console.error(error.message)
   }

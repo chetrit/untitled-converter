@@ -44,7 +44,52 @@ router.get('/rates', async (req, res): Promise<void> => {
   try {
     // get symbols from symbolsData.json
     const ratesData = JSON.parse(await fsPromises.readFile('./src/config/ratesData/ratesData.json', 'utf-8'))
-    res.json(ratesData)
+    res.status(200).json(ratesData)
+  } catch (error: any) {
+    console.error(error.message)
+    res.status(500).json({ error: error.message })
+  }
+})
+
+router.get('/rates/historicRates/:code', async (req, res): Promise<void> => {
+  /**
+ * @swagger
+ * /rates/historicRates/{code}:
+ *   get:
+ *     tags:
+ *       - Rates
+ *     summary: get price history
+ *     description: get the price history of a currency, given its code.
+ *     parameters:
+ *       - name: code
+ *         type: string
+ *         in: path
+ *         required: true
+ *         description: The code to get price history for.
+ *     responses:
+ *       '200':
+ *         description: Data generated and returned.
+ *       '500':
+ *         description: Internal server error.
+ */
+
+  try {
+    // return json file with rates and dates for the given code
+    const code: any = req.params.code
+    console.log('Received code:', code)
+
+    // generate json file
+    const historicRates: any = fs.readFileSync('./src/config/ratesData/historicRates.json', 'utf-8')
+    const parsedHistoricRates: any = JSON.parse(historicRates)
+    const historicRatesForCode: any = {}
+    historicRatesForCode.code = code
+    // make a json file where the key is the date and the value is the rate
+    for (const date in parsedHistoricRates.dates) {
+      if (parsedHistoricRates.dates[date][code]) {
+        historicRatesForCode[date] = parsedHistoricRates.dates[date][code]
+      }
+    }
+    res.json(historicRatesForCode)
   } catch (error: any) {
     console.error(error.message)
     res.status(500).json({ error: error.message })

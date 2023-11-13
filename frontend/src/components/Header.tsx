@@ -1,70 +1,64 @@
-// Header.tsx
-import * as React from 'react'
+import * as React from 'react';
+import { AppBar, Toolbar, IconButton, Typography, Button, Avatar, Box } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useNavigate } from 'react-router-dom';
 
-import AccountCircle from '@mui/icons-material/AccountCircle'
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import { AppBar, Toolbar, IconButton, Typography, Button, Avatar } from '@mui/material'
-import { useNavigate } from 'react-router-dom' // Import useNavigate hook
-
-import Favorite from 'pages/Favorite/Favorite'
-import Selection from 'pages/Selection/Selection'
-
-import logo from '../assets/images/logo.png'
+import logo from '../assets/images/logo.png';
 
 interface HeaderProps {
-  user: { name: string, profilePicture: string } | null
+  user: { name: string; profilePicture: string } | null;
 }
 
 const Header: React.FC<HeaderProps> = ({ user }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Define the navigation functions
   const handleFavoritesClick = () => {
-    navigate('/favorite') // For now, navigate to the root
-  }
+    navigate('/favorite');
+  };
 
   const handleAllCurrenciesClick = () => {
-    navigate('/selection') // For now, navigate to the root
-  }
+    navigate('/selection');
+  };
 
   const handleLogoClick = () => {
-    navigate('/') // For now, navigate to the root
-  }
+    navigate('/');
+  };
 
   return (
-    <AppBar position={'static'}>
+    <AppBar position="static">
       <Toolbar>
         <IconButton
-          edge={'start'}
-          color={'inherit'}
-          aria-label={'logo'}
+          edge="start"
+          color="inherit"
+          aria-label="logo"
           sx={{ mr: 2 }}
           onClick={handleLogoClick}
         >
-          <img src={logo} alt={'Untitled Converter Logo'} style={{ height: '40px' }}/>
+          <img src={logo} alt="Untitled Converter Logo" style={{ height: '40px' }} />
         </IconButton>
-        <Typography variant={'h6'} component={'div'} sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" component="div" >
           Untitled Converter
         </Typography>
-        <Button color={'inherit'} startIcon={<FavoriteBorderIcon/>} onClick={handleFavoritesClick}>
+        <Button color="inherit" startIcon={<FavoriteBorderIcon />} onClick={handleFavoritesClick} sx={{ marginLeft: 1 }}>
           Favorites
         </Button>
-        <Button color={'inherit'} startIcon={<CurrencyExchangeIcon/>} onClick={handleAllCurrenciesClick}>
+        <Button color="inherit" startIcon={<CurrencyExchangeIcon />} onClick={handleAllCurrenciesClick}>
           All Currencies
         </Button>
-        {user
-          ? (
-            <Avatar alt={user.name} src={user.profilePicture}/>
-            )
-          : (
-            <IconButton color={'inherit'}>
-              <AccountCircle/>
-            </IconButton>
-            )}
+        <Box sx={{ flexGrow: 1 }} />
+        {user ? (
+          <Avatar alt={user.name} src={user.profilePicture} />
+        ) : (
+          <IconButton color="inherit">
+            <AccountCircle />
+          </IconButton>
+        )}
       </Toolbar>
     </AppBar>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

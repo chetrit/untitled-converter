@@ -36,41 +36,42 @@ const Selection = () => {
         {/* ... AppBar content ... */}
       </AppBar>
       <Box sx={{
-        position: 'relative',
-        borderRadius: 1,
-        backgroundColor: 'common.white',
-        marginLeft: 0,
-        width: '100%'
-        // ... rest of your search styles
-      }}
-      >
-        <Box sx={{
-          padding: '0 16px',
-          height: '100%',
-          position: 'absolute',
-          pointerEvents: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        >
-          <SearchIcon/>
-        </Box>
-        <InputBase
-          placeholder={'Search…'}
-          sx={{
-            color: 'inherit',
-            padding: '8px 8px 8px 0',
-            // vertical padding + font size from searchIcon
-            paddingLeft: 'calc(1em + 32px)',
-            width: '100%'
-            // ... rest of your input styles
-          }}
-          inputProps={{ 'aria-label': 'search' }}
-          onChange={handleSearchChange}
-        />
-      </Box>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'relative',
+  borderRadius: 1,
+  backgroundColor: 'common.white',
+  marginLeft: 0,
+  width: '100%',
+  height: '50px' // Ajustez selon vos besoins
+}}
+>
+  <SearchIcon sx={{ color: 'inherit' }} /> 
+  <InputBase
+    placeholder={'Search…'}
+    sx={{
+      color: 'inherit',
+      padding: '8px 8px 8px 0',
+      paddingLeft: 'calc(1em + 32px)', // Ajustez selon la taille de l'icône
+      width: '50%', // Ajustez selon vos préférences
+      // ... rest of your input styles
+    }}
+    inputProps={{ 'aria-label': 'search' }}
+    onChange={handleSearchChange}
+  />
+</Box>
+<Box sx={{ 
+  display: 'flex', 
+  justifyContent: 'center' 
+}}>
+  <Box sx={{ 
+    display: 'flex', 
+    flexWrap: 'wrap', 
+    justifyContent: 'flex-start',
+    maxWidth: '1280px',
+    width: '100%',
+  }}>
         {filteredCurrencyPairs.map((pair) => (
           <Card sx={{
             maxWidth: 345,
@@ -94,6 +95,7 @@ const Selection = () => {
             </CardContent>
           </Card>
         ))}
+      </Box>
       </Box>
     </>
   )

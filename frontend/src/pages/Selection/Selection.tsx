@@ -4,39 +4,67 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import SearchIcon from '@mui/icons-material/Search'
 import {
-  AppBar,
-  Toolbar,
   IconButton,
   Typography,
   InputBase,
   Card,
   CardContent,
   CardMedia,
-  Box
+  Box,
+  Snackbar,
+  AlertColor
 } from '@mui/material'
 
 import Curve from 'assets/images/curve.png'
+
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 // Sample data for currency pairs
 const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB']
 
 const Selection = () => {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [favorites, setFavorites] = useState(new Set())
+  const [searchQuery, setSearchQuery] = useState('');
+  const [favorites, setFavorites] = useState(new Set());
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
   }
 
   const addToFavorites = (pair: string) => {
-    setFavorites(new Set(favorites).add(pair))
+    setFavorites(new Set(favorites).add(pair));
+    setSnackbarMessage(`Added ${pair} to favorites.`);
+    setSnackbarSeverity('success');
+    setOpen(true);
     // call add to favorites endpoint
   }
 
   const removeFromFavorites = (pair: string) => {
-    const newFavorites = new Set(favorites)
-    newFavorites.delete(pair)
-    setFavorites(newFavorites)
+    const newFavorites = new Set(favorites);
+    newFavorites.delete(pair);
+    setFavorites(newFavorites);
+    setSnackbarMessage(`Removed ${pair} to favorites.`);
+    setSnackbarSeverity('warning');
+    setOpen(true);
     // call add to favorites endpoint
   }
 
@@ -113,6 +141,11 @@ const Selection = () => {
           ))}
         </Box>
       </Box>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   )
 }

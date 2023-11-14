@@ -21,7 +21,7 @@ const pathToNode: Array<{ path: string, Element: any }> = [
 
   // Update the route for CurrencyConverter to include parameters
   // { path: '/converter', Element: CurrencyConverter },
-  { path: '/converter/:fromCurrency/:toCurrency', Element: CurrencyConverter },
+  { path: '/converter/:currencyPair', Element: CurrencyConverter },
 
   { path: '/favorite', Element: Favorite },
   { path: '/selection', Element: Selection }

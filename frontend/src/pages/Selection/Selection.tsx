@@ -1,8 +1,10 @@
+// Selection.jsx
 import React, { useState } from 'react'
 
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import SearchIcon from '@mui/icons-material/Search'
+<<<<<<< Updated upstream
 import {
   IconButton,
   Typography,
@@ -14,6 +16,12 @@ import {
   Snackbar,
   AlertColor
 } from '@mui/material'
+=======
+import { AppBar, Toolbar, InputBase, Card, CardContent, CardMedia, Box, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
+
+import Curve from 'assets/images/curve.png'
+>>>>>>> Stashed changes
 
 import Curve from 'assets/images/curve.png'
 
@@ -27,7 +35,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 // Sample data for currency pairs
-const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB']
+const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB', 'VND-EUR', 'HUF-EUR']
 
 const Selection = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -69,13 +77,12 @@ const Selection = () => {
   }
 
   const filteredCurrencyPairs = searchQuery
-    ? currencyPairs.filter((pair) =>
-      pair.toLowerCase().includes(searchQuery)
-    )
+    ? currencyPairs.filter((pair) => pair.toLowerCase().includes(searchQuery))
     : currencyPairs
 
   return (
     <>
+<<<<<<< Updated upstream
       <Box sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -87,6 +94,23 @@ const Selection = () => {
         width: '100%',
         height: '50px'
       }}
+=======
+      <AppBar position={'static'}>
+        {/* ... AppBar content ... */}
+      </AppBar>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'relative',
+          borderRadius: 1,
+          backgroundColor: 'common.white',
+          marginLeft: 0,
+          width: '100%',
+          height: '50px' // Adjust according to your needs
+        }}
+>>>>>>> Stashed changes
       >
         <SearchIcon sx={{ color: 'inherit' }}/>
         <InputBase
@@ -94,13 +118,20 @@ const Selection = () => {
           sx={{
             color: 'inherit',
             padding: '8px 8px 8px 0',
+<<<<<<< Updated upstream
             paddingLeft: 'calc(1em + 32px)',
             width: '50%'
+=======
+            paddingLeft: 'calc(1em + 32px)', // Adjust according to the icon size
+            width: '50%' // Adjust according to your preferences
+            // ... rest of your input styles
+>>>>>>> Stashed changes
           }}
           inputProps={{ 'aria-label': 'search' }}
           onChange={handleSearchChange}
         />
       </Box>
+<<<<<<< Updated upstream
       <Box sx={{
         display: 'flex',
         justifyContent: 'center'
@@ -138,6 +169,52 @@ const Selection = () => {
                 </IconButton>
               </CardContent>
             </Card>
+=======
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'flex-start',
+            maxWidth: '1280px',
+            width: '100%'
+          }}
+        >
+          {filteredCurrencyPairs.map((pair) => (
+            <Link
+              key={pair}
+              to={`/converter/${pair}`}
+              
+              
+  
+
+
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <Card
+                sx={{
+                  maxWidth: 345,
+                  m: 2
+                  // ... rest of your card styles
+                }}
+              >
+                <CardMedia
+                  component={'img'}
+                  height={'140'}
+                  image={Curve} // replace with the actual image path
+                  alt={'Trading Curve'}
+                  sx={{
+                    filter: 'blur(5px)'
+                  }}
+                />
+                <CardContent>
+                  <Typography variant={'h5'} component={'h2'}>
+                    {pair}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Link>
+>>>>>>> Stashed changes
           ))}
         </Box>
       </Box>

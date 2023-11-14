@@ -1,3 +1,6 @@
+// App.tsx
+import React from 'react'
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import CurrencyConverter from 'pages/Converter/Converter'
@@ -15,7 +18,11 @@ const pathToNode: Array<{ path: string, Element: any }> = [
   { path: '/example', Element: PageExample },
   { path: '/sign-in', Element: SignIn },
   { path: '/sign-up', Element: SignUp },
-  { path: '/converter', Element: CurrencyConverter },
+
+  // Update the route for CurrencyConverter to include parameters
+  // { path: '/converter', Element: CurrencyConverter },
+  { path: '/converter/:fromCurrency/:toCurrency', Element: CurrencyConverter },
+
   { path: '/favorite', Element: Favorite },
   { path: '/selection', Element: Selection }
 ]

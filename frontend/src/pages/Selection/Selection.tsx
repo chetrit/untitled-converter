@@ -62,7 +62,7 @@ const Selection = () => {
     const newFavorites = new Set(favorites);
     newFavorites.delete(pair);
     setFavorites(newFavorites);
-    setSnackbarMessage(`Removed ${pair} to favorites.`);
+    setSnackbarMessage(`Removed ${pair} from favorites.`);
     setSnackbarSeverity('warning');
     setOpen(true);
     // call add to favorites endpoint

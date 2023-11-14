@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Curve from 'assets/images/curve.png'
+import React, { useState, useEffect } from 'react'
+
 import {
   Container,
   TextField,
@@ -7,14 +7,15 @@ import {
   Button,
   Card,
   CardContent,
-  Typography,
+  Typography
 
-} from '@material-ui/core';
-
+} from '@material-ui/core'
 import {
   Box,
   CardMedia
 } from '@mui/material'
+
+import Curve from 'assets/images/curve.png'
 
 const currencies = [
   {
@@ -50,72 +51,70 @@ const currencies = [
   {
     value: 'VND',
     label: 'Đồng Việt Nam'
-  },
+  }
   // ... add other currencies as needed
-];
+]
 
 const CurrencyConverter = () => {
-  const [amount, setAmount] = useState('');
-  const [fromCurrency, setFromCurrency] = useState('USD');
-  const [toCurrency, setToCurrency] = useState('EUR');
-  const [convertedAmount, setConvertedAmount] = useState('');
+  const [amount, setAmount] = useState('')
+  const [fromCurrency, setFromCurrency] = useState('USD')
+  const [toCurrency, setToCurrency] = useState('EUR')
+  const [convertedAmount, setConvertedAmount] = useState('')
 
   useEffect(() => {
     // You would use an API call here to get real-time conversion rates
-  }, [fromCurrency, toCurrency]);
+  }, [fromCurrency, toCurrency])
 
-  const handleAmountChange = (event) => {
-    setAmount(event.target.value);
-  };
+  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(event.target.value)
+  }
 
-  const handleFromCurrencyChange = (event) => {
-    setFromCurrency(event.target.value);
-  };
+  const handleFromCurrencyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFromCurrency(event.target.value)
+  }
 
-  const handleToCurrencyChange = (event) => {
-    setToCurrency(event.target.value);
-  };
+  const handleToCurrencyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setToCurrency(event.target.value)
+  }
 
   const convertCurrency = () => {
     // Here you would call the conversion API to convert the currency
     // and then set the converted amount with setConvertedAmount
-  };
+  }
 
   return (
-    
+
     <Container maxWidth={'lg'}>
 
-    <Box
-      sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        width: '100%', // Make it full width
-        // border: '2px solid black', // Add border
-        marginTop: '5%', // Add margin top
-        marginBottom: '5%', // Add margin bottom
-        borderradius: "10px",
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
-      }}
-    >
-      <CardMedia
-        component={'img'}
-        height={'300px'}
-        image={Curve} // replace with actual image path
-        alt={'Trading Curve'}
+      <Box
         sx={{
-          filter: 'blur(5px)',
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          width: '100%', // Make it full width
+          // border: '2px solid black', // Add border
+          marginTop: '5%', // Add margin top
+          marginBottom: '5%', // Add margin bottom
+          borderradius: '10px',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
         }}
-      />
-    </Box>
-
+      >
+        <CardMedia
+          component={'img'}
+          height={'300px'}
+          image={Curve} // replace with actual image path
+          alt={'Trading Curve'}
+          sx={{
+            filter: 'blur(5px)'
+          }}
+        />
+      </Box>
 
       <Card>
         <CardContent>
           <Typography variant={'h5'} component={'h2'} gutterBottom>
             Real-time Currency Converter
           </Typography>
-
 
           <TextField
             label={'Amount'}
@@ -169,7 +168,7 @@ const CurrencyConverter = () => {
         </CardContent>
       </Card>
     </Container>
-  );
-};
+  )
+}
 
-export default CurrencyConverter;
+export default CurrencyConverter

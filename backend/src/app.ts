@@ -4,13 +4,16 @@ import { generateSwaggerDoc } from 'generateSwagger'
 
 import logger from '@middlewares/logging'
 
+import { updateRates } from '@services/exchangeRates/exchangeRates'
 import { useRoutes, useMiddlewares, useSession } from '@services/utils/appUtils/appUtils'
 
 import { appDataSource } from '@config/dataSource'
 
+const APItimeout = 3600000
+
 function checkRequiredEnvironmentVariables (): void {
-  const missingEnvVariables: string [] = []
-  const envVariablesToCheck: string [] = [
+  const missingEnvVariables: string[] = []
+  const envVariablesToCheck: string[] = [
     'NODE_ENV',
     'PORT',
     'ORIGIN_PATTERN',
@@ -66,3 +69,11 @@ function checkRequiredEnvironmentVariables (): void {
     logger.error('Error during Data Source initialization:', err)
   })
 })()
+
+function updateExchangeRates (): void {
+  const BASE: string = 'EUR'
+  const ACCESS_KEY: string = '6e2ab2c20f56be76dd517965ae79d25d'
+  void updateRates(ACCESS_KEY, BASE)
+  setInterval(() => { updateExchangeRates() }, APItimeout)
+}
+updateExchangeRates()

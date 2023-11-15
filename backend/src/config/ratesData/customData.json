@@ -1,0 +1,11 @@
+{
+  "base": "EUR",
+  "rates": {
+    "asdawf": 2,
+    "DIA": 10000
+  },
+  "symbols": {
+    "asdawf": "asdff",
+    "DIA": "Big Diamond"
+  }
+}

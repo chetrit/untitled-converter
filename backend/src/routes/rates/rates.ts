@@ -4,6 +4,8 @@ import express, { type Response, Router } from 'express'
 import { promises as fsPromises } from 'fs'
 import * as fs from 'fs'
 import { type Int32 } from 'typeorm'
+
+import updateFavoriteCurrencies from '@models/account/favoriteCurrency'
 const router = Router()
 
 router.use(express.json())
@@ -230,4 +232,23 @@ router.post('/rates', async (req, res): Promise<void> => {
     res.status(500).json({ error: error.message })
   }
 })
+
+// call updateFavoriteCurrencies from favoriteCurrency.ts
+
+router.post('/rates/favorites', async (req, res): Promise<void> => {
+  try {
+    const favoriteCurrencies: string = req.body.favoriteCurrencies
+    console.log('Received favoriteCurrencies:', favoriteCurrencies)
+    const email: string = req.body.email
+
+    // call updateFavoriteCurrencies from favoriteCurrency.ts with email and code as parameters
+    updateFavoriteCurrencies(email, favoriteCurrencies)
+    res.status(200).json({ message: 'Data saved successfully' })
+  } catch (error: any) {
+    console.error(error.message)
+    res.status(500).json({ error: error.message })
+  }
+}
+)
+
 export default router

@@ -14,6 +14,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
+import { useAuth } from 'components/AuthContext';
+import { useNavigate } from 'react-router-dom'
+
+
 function Copyright (props: any) {
   return (
     <Typography variant={'body2'} color={'text.secondary'} align={'center'} {...props}>
@@ -31,17 +35,42 @@ function Copyright (props: any) {
 const defaultTheme = createTheme()
 
 export default function SignUp () {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log({
+
+    const formData = {
       email: data.get('email'),
       password: data.get('password'),
       firstName: data.get('firstName'),
       lastName: data.get('lastName'),
-      bornDate: data.get('bornDate')
-    })
-  }
+      bornDate: '01/01/2001',
+    };
+
+    try {
+      console.log('Sending data to backend', formData);
+      const response = await fetch('http://localhost:8080/account/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.status === 201) {
+        login();
+        navigate('/');
+        console.log('Account created successfully');
+      } else {
+        console.log('Error creating account');
+      }
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -92,8 +121,8 @@ export default function SignUp () {
               label={'Born Date'}
               name={'bornDate'}
               type={'date'}
-              defaultValue={'2000-01-01'}
-              InputLabelProps={{ shrink: true }} // Permet d'afficher correctement le label
+              defaultValue={'01/01/2001'}
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
               <Grid item xs={12}>

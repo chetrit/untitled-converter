@@ -14,6 +14,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
+import { useAuth } from 'components/AuthContext';
+import { useNavigate } from 'react-router-dom'
+
 function Copyright (props: any) {
   return (
     <Typography variant={'body2'} color={'text.secondary'} align={'center'} {...props}>
@@ -31,14 +34,37 @@ function Copyright (props: any) {
 const defaultTheme = createTheme()
 
 export default function SignIn () {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    console.log({
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const formData = {
       email: data.get('email'),
-      password: data.get('password')
-    })
-  }
+      password: data.get('password'),
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/account/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.status === 200) {
+        login(); 
+        navigate('/'); 
+      } else {
+        console.log('Invalid login credentials');
+      }
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>

@@ -36,7 +36,10 @@ export default function SignUp () {
     const data = new FormData(event.currentTarget)
     console.log({
       email: data.get('email'),
-      password: data.get('password')
+      password: data.get('password'),
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
+      bornDate: data.get('bornDate')
     })
   }
 
@@ -82,6 +85,18 @@ export default function SignUp () {
                 />
               </Grid>
               <Grid item xs={12}>
+            <TextField
+              required
+              fullWidth
+              id={'bornDate'}
+              label={'Born Date'}
+              name={'bornDate'}
+              type={'date'}
+              defaultValue={'2000-01-01'}
+              InputLabelProps={{ shrink: true }} // Permet d'afficher correctement le label
+            />
+          </Grid>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -119,7 +134,7 @@ export default function SignUp () {
             </Button>
             <Grid container justifyContent={'flex-end'}>
               <Grid item>
-                <Link href={'#'} variant={'body2'}>
+                <Link href={'/sign-in'} variant={'body2'}>
                   Already have an account? Sign in
                 </Link>
               </Grid>

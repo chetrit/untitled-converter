@@ -5,7 +5,6 @@ import { promises as fsPromises } from 'fs'
 import * as fs from 'fs'
 import { type Int32 } from 'typeorm'
 
-import updateFavoriteCurrencies from '@models/account/favoriteCurrency'
 const router = Router()
 
 router.use(express.json())
@@ -98,10 +97,10 @@ router.get('/rates/historicRates/:code', async (req, res): Promise<void> => {
   }
 })
 
-router.delete('/rates/:code', async (req, res): Promise<void> => {
+router.delete('/rates/delete/:code', async (req, res): Promise<void> => {
   /**
  * @swagger
- * /rates/{code}:
+ * /rates/delete/{code}:
  *   delete:
  *     tags:
  *       - Rates
@@ -233,17 +232,148 @@ router.post('/rates', async (req, res): Promise<void> => {
   }
 })
 
-// call updateFavoriteCurrencies from favoriteCurrency.ts
-
+// take a string as input and put that in the favorites.json list belonging to the user based on their id
 router.post('/rates/favorites', async (req, res): Promise<void> => {
-  try {
-    const favoriteCurrencies: string = req.body.favoriteCurrencies
-    console.log('Received favoriteCurrencies:', favoriteCurrencies)
-    const email: string = req.body.email
+  /**
+ * @swagger
+ * /rates/favorites:
+ *   post:
+ *     tags:
+ *       - Rates
+ *     summary: Add favorite currency
+ *     description: Add a favorite currency to favorites.json, given its code and the user's email.
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *               description: The email of the user.
+ *             currencyCode:
+ *               type: string
+ *               description: The code of the currencies as "xxx-yyy".
+ *     responses:
+ *       '200':
+ *         description: Data saved successfully.
+ *       '500':
+ *         description: Internal server error.
+ */
 
-    // call updateFavoriteCurrencies from favoriteCurrency.ts with email and code as parameters
-    updateFavoriteCurrencies(email, favoriteCurrencies)
+  try {
+    const email: string = req.body.email
+    const currencyCode: string = req.body.currencyCode
+    console.log('Received email:', email)
+    console.log('Received currencyCode:', currencyCode)
+    // get the favorites.json file
+    const favorites: any = fs.readFileSync('./src/config/ratesData/favorites.json', 'utf-8')
+    const parsedFavorites: any = JSON.parse(favorites)
+    let list: string[] = []
+    list = parsedFavorites[email]
+    if (!list) {
+      parsedFavorites[email] = []
+      list = parsedFavorites[email]
+    }
+    list.push(currencyCode)
+    parsedFavorites[email] = list
+    // write to the file
+    fs.writeFileSync(
+      './src/config/ratesData/favorites.json',
+      JSON.stringify(parsedFavorites, null, 2)
+    )
     res.status(200).json({ message: 'Data saved successfully' })
+  } catch (error: any) {
+    console.error(error.message)
+    res.status(500).json({ error: error.message })
+  }
+}
+)
+
+router.delete('/rates/favorites', async (req, res): Promise<void> => {
+  /**
+ * @swagger
+ * /rates/favorites:
+ *   delete:
+ *     tags:
+ *       - Rates
+ *     summary: Delete a favorite currency
+ *     description: Delete a favorite currency to favorites.json, given its code and the user's email.
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: body
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             email:
+ *               type: string
+ *               description: The email of the user.
+ *             currencyCode:
+ *               type: string
+ *               description: The code of the currencies as "xxx-yyy".
+ *     responses:
+ *       '200':
+ *         description: Data deleted successfully.
+ *       '500':
+ *         description: Internal server error.
+ */
+
+  try {
+    const email: string = req.body.email
+    const currencyCode: string = req.body.currencyCode
+    // get the favorites.json file
+    const favorites: any = fs.readFileSync('./src/config/ratesData/favorites.json', 'utf-8')
+    const parsedFavorites: any = JSON.parse(favorites)
+    let list = parsedFavorites[email]
+    list = list.filter((item: string) => item !== currencyCode)
+    parsedFavorites[email] = list
+    // write to the file
+    fs.writeFileSync(
+      './src/config/ratesData/favorites.json',
+      JSON.stringify(parsedFavorites, null, 2)
+    )
+    res.status(200).json({ message: 'Data deleted successfully' })
+  } catch (error: any) {
+    console.error(error.message)
+    res.status(500).json({ error: error.message })
+  }
+}
+)
+
+router.get('/rates/favorites', async (req, res): Promise<void> => {
+  /**
+ * @swagger
+ * /rates/favorites:
+ *   get:
+ *     tags:
+ *       - Rates
+ *     summary: Get favorite currencies
+ *     description: Get favorite currencies from favorites.json, given the user's email.
+ *     parameters:
+ *       - name: email
+ *         in: query
+ *         required: true
+ *         type: string
+ *         description: The email of the user.
+ *     responses:
+ *       '200':
+ *         description: Data generated and returned.
+ *       '500':
+ *         description: Internal server error.
+ */
+
+  try {
+    const email: string = req.body.email
+    // get the favorites.json file
+    const favorites: any = fs.readFileSync('./src/config/ratesData/favorites.json', 'utf-8')
+    const parsedFavorites: any = JSON.parse(favorites)
+    res.status(200).json(parsedFavorites[email])
   } catch (error: any) {
     console.error(error.message)
     res.status(500).json({ error: error.message })

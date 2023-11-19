@@ -12,5 +12,11 @@
   ],
   "test3@mail.com": [
     "eur-dkk"
+  ],
+  "oui@oui.com": [
+    "EUR-AOA"
+  ],
+  "undefined": [
+    null
   ]
 }

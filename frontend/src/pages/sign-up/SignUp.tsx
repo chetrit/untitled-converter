@@ -60,7 +60,8 @@ export default function SignUp () {
       })
 
       if (response.status === 201) {
-        login()
+        const email = data.get('email') as string
+        login(email)
         navigate('/')
         console.log('Account created successfully')
       } else {

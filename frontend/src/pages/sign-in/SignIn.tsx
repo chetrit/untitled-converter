@@ -56,7 +56,8 @@ export default function SignIn () {
       })
 
       if (response.status === 200) {
-        login()
+        const email = data.get('email') as string
+        login(email)
         navigate('/')
       } else {
         console.log('Invalid login credentials')

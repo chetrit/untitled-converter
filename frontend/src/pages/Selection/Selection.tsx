@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
+import { useAuth } from 'components/AuthContext';
+
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import SearchIcon from '@mui/icons-material/Search'
@@ -22,6 +24,7 @@ type SnackbarSeverity = 'error' | 'success' | 'info' | 'warning'
 const ExchangeRateList = () => {
   const [rates, setRates] = useState<any>({}) // You can replace 'any' with the correct type
   const [base, setBase] = useState<string>('') // Assuming 'base' is a string
+  const { userEmail } = useAuth();
 
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -52,10 +55,36 @@ const ExchangeRateList = () => {
   }
 
   const addToFavorites = (pair: string) => {
-    setFavorites(new Set(favorites).add(pair))
-    setSnackbarSeverity('success')
-    setSnackbarMessage(`Added ${pair} to favorites`)
-  }
+    pair = "EUR-" + pair;
+    // console.log('Adding to favorites:', pair);
+    if (!userEmail) {
+      console.log("User is not logged in");
+      return;
+    }
+
+    const url = `http://localhost:8080/rates/favorites`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: userEmail, currencyCode: pair }),
+    })
+    .then(response => {
+      // console.log(response);
+      if (response.status === 200) {
+        setFavorites(new Set(favorites).add(pair));
+        setSnackbarSeverity('success');
+        setSnackbarMessage(`Added ${pair} to favorites`);
+      } else {
+        // Gérer les erreurs
+        console.log('Error adding to favorites');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  };
 
   const removeFromFavorites = (pair: string) => {
     const updatedFavorites = new Set(favorites)
@@ -87,9 +116,9 @@ const ExchangeRateList = () => {
         }}
       >
         {filteredCurrencyPairs.map(([pair, base], index) => (
-          <Link
-            key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}
-          >
+          // <Link
+          //   key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}
+          // >
             <Card sx={{ maxWidth: 345, m: 2 }}>
               <CardMedia
                 component={'img'}
@@ -121,7 +150,7 @@ const ExchangeRateList = () => {
                 </IconButton>
               </CardContent>
             </Card>
-          </Link>
+          //</Link>
         ))}
       </Box>
     )

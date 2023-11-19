@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import SearchIcon from '@mui/icons-material/Search'
@@ -12,13 +12,33 @@ import {
   Box
 } from '@mui/material'
 
+import { useAuth } from 'components/AuthContext'
+
 import Curve from 'assets/images/curve.png'
+import { colors } from '@material-ui/core'
 
 const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB']
 
 const FavoritesPage = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const [favorites, setFavorites] = useState(new Set(currencyPairs))
+  const [favorites, setFavorites] = useState(new Set<string>())
+  const { userEmail } = useAuth() // Récupérer l'email de l'utilisateur connecté
+
+  useEffect(() => {
+    console.log('Fetching favorites for:', userEmail);
+    if (userEmail) {
+      const url = `http://localhost:8080/rates/favorites?email=${(userEmail)}`;
+      console.log('URL:', url);
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          setFavorites(new Set(data));
+        })
+        .catch(error => console.error('Error fetching favorites:', error));
+    }
+  }, [userEmail]);
+  
+  
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)

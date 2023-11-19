@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import SearchIcon from '@mui/icons-material/Search'
-import { Link } from 'react-router-dom'
 import {
   IconButton,
   Typography,
@@ -13,59 +12,59 @@ import {
   CardMedia,
   Box,
   Snackbar,
-  AlertColor,
+  type AlertColor
 } from '@mui/material'
+import MuiAlert, { type AlertProps } from '@mui/material/Alert'
+import { Link } from 'react-router-dom'
 
 import Curve from 'assets/images/curve.png'
 
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert (
   props,
-  ref,
+  ref
 ) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+  return <MuiAlert elevation={6} ref={ref} variant={'filled'} {...props}/>
+})
 
 // Sample data for currency pairs
 const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB', 'VND-EUR', 'HUF-EUR']
 
 const Selection = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [favorites, setFavorites] = useState(new Set());
+  const [searchQuery, setSearchQuery] = useState('')
+  const [favorites, setFavorites] = useState(new Set())
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false)
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
-      return;
+      return
     }
 
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success')
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
   }
 
   const addToFavorites = (pair: string) => {
-    setFavorites(new Set(favorites).add(pair));
-    setSnackbarMessage(`Added ${pair} to favorites.`);
-    setSnackbarSeverity('success');
-    setOpen(true);
+    setFavorites(new Set(favorites).add(pair))
+    setSnackbarMessage(`Added ${pair} to favorites.`)
+    setSnackbarSeverity('success')
+    setOpen(true)
     // call add to favorites endpoint
   }
 
   const removeFromFavorites = (pair: string) => {
-    const newFavorites = new Set(favorites);
-    newFavorites.delete(pair);
-    setFavorites(newFavorites);
-    setSnackbarMessage(`Removed ${pair} from favorites.`);
-    setSnackbarSeverity('warning');
-    setOpen(true);
+    const newFavorites = new Set(favorites)
+    newFavorites.delete(pair)
+    setFavorites(newFavorites)
+    setSnackbarMessage(`Removed ${pair} from favorites.`)
+    setSnackbarSeverity('warning')
+    setOpen(true)
     // call add to favorites endpoint
   }
 
@@ -117,36 +116,36 @@ const Selection = () => {
         >
           {filteredCurrencyPairs.map((pair) => (
 
-          <Link
+            <Link
               key={pair}
               to={`/converter/${pair}`}
 
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
-           
-            <Card sx={{
-              maxWidth: 345,
-              m: 2
-            }} key={pair}
-            >
-              <CardMedia
-                component={'img'}
-                height={'140'}
-                image={Curve}
-                alt={'Trading Curve'}
-                sx={{
-                  filter: 'blur(5px)'
-                }}
-              />
-              <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography variant={'h5'} component={'h2'}>
-                  {pair}
-                </Typography>
-                <IconButton onClick={() => { favorites.has(pair) ? removeFromFavorites(pair) : addToFavorites(pair) }}>
-                  {favorites.has(pair) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
-                </IconButton>
-              </CardContent>
-            </Card>
+
+              <Card sx={{
+                maxWidth: 345,
+                m: 2
+              }} key={pair}
+              >
+                <CardMedia
+                  component={'img'}
+                  height={'140'}
+                  image={Curve}
+                  alt={'Trading Curve'}
+                  sx={{
+                    filter: 'blur(5px)'
+                  }}
+                />
+                <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant={'h5'} component={'h2'}>
+                    {pair}
+                  </Typography>
+                  <IconButton onClick={() => { favorites.has(pair) ? removeFromFavorites(pair) : addToFavorites(pair) }}>
+                    {favorites.has(pair) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+                  </IconButton>
+                </CardContent>
+              </Card>
             </Link>
           ))}
         </Box>
@@ -161,4 +160,3 @@ const Selection = () => {
 }
 
 export default Selection
-

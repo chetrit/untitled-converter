@@ -6,17 +6,16 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { AppBar, Toolbar, IconButton, Typography, Button, Avatar, Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
-import { useAuth } from 'components/AuthContext';
-
+import { useAuth } from 'components/AuthContext'
 
 import logo from '../assets/images/logo.png'
 
 const Header: React.FC = () => {
   const navigate = useNavigate()
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout } = useAuth()
 
   if (!isLoggedIn) {
-    return null;
+    return null
   }
 
   const handleFavoritesClick = () => {
@@ -32,9 +31,9 @@ const Header: React.FC = () => {
   }
 
   const handleLogout = () => {
-    logout();
-    navigate('/sign-in');
-  };
+    logout()
+    navigate('/sign-in')
+  }
 
   return (
     <AppBar position={'static'}>

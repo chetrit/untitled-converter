@@ -52,13 +52,13 @@ const currencies = [
 
 const CurrencyConverter = () => {
   // Use the useParams hook to get the entire currency pair string
-  const { currencyPair = '' } = useParams<{ currencyPair?: string }>();
+  const { currencyPair = '' } = useParams<{ currencyPair?: string }>()
 
   // Split the currency pair into fromCurrency and toCurrency
-  const [fromCurrency, toCurrency] = currencyPair.split('-');
+  const [fromCurrency, toCurrency] = currencyPair.split('-')
 
-  const [amount, setAmount] = useState('');
-  const [convertedAmount, setConvertedAmount] = useState('');
+  const [amount, setAmount] = useState('')
+  const [convertedAmount, setConvertedAmount] = useState('')
 
   useEffect(() => {
     // You can use the values of fromCurrency and toCurrency here

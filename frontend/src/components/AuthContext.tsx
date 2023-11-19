@@ -1,35 +1,35 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, type ReactNode } from 'react'
 
-type AuthContextType = {
-  isLoggedIn: boolean;
-  login: () => void;
-  logout: () => void;
-};
+interface AuthContextType {
+  isLoggedIn: boolean
+  login: () => void
+  logout: () => void
+}
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null)
 
 export const useAuth = () => {
-  return useContext(AuthContext) as AuthContextType;
-};
+  return useContext(AuthContext) as AuthContextType
+}
 
-type AuthProviderProps = {
-  children: ReactNode;
-};
+interface AuthProviderProps {
+  children: ReactNode
+}
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const login = () => {
-    setIsLoggedIn(true);
-  };
+    setIsLoggedIn(true)
+  }
 
   const logout = () => {
-    setIsLoggedIn(false);
-  };
+    setIsLoggedIn(false)
+  }
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}

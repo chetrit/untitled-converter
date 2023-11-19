@@ -13,33 +13,7 @@
   "test3@mail.com": [
     "eur-dkk"
   ],
-  "oui@oui.com": [
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    "EUR-AFN",
-    "EUR-THB",
-    "EUR-AFN",
-    "EUR-AOA",
-    "EUR-THB",
-    "EUR-THB",
-    null,
-    null,
-    null,
-    null
-  ],
+  "oui@oui.com": [],
   "undefined": [
     null
   ]

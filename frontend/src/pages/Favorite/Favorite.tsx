@@ -27,7 +27,7 @@ const FavoritesPage = () => {
   useEffect(() => {
     console.log('Fetching favorites for:', userEmail);
     if (userEmail) {
-      const url = `http://localhost:8080/rates/favorites?email=${(userEmail)}`;
+      const url = `http://localhost:8080/rates/favorites/${(userEmail)}`;
       console.log('URL:', url);
       fetch(url)
         .then(response => response.json())
@@ -45,11 +45,35 @@ const FavoritesPage = () => {
   }
 
   const removeFromFavorites = (pair: string) => {
-    const newFavorites = new Set(favorites)
-    newFavorites.delete(pair)
-    setFavorites(newFavorites)
-    // call to favorites endpoint
-  }
+    const updatedFavorites = new Set(favorites);
+  
+    if (!userEmail) {
+      console.log("User is not logged in");
+      return;
+    }
+  
+    const url = `http://localhost:8080/rates/favorites`;
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: userEmail, currencyCode: pair }),
+    })
+    .then(response => {
+      if (response.status === 200) {
+        console.log(`Removed ${pair} from favorites`);
+        updatedFavorites.delete(pair);
+        setFavorites(updatedFavorites);
+      } else {
+        console.log('Error removing from favorites');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  };
+  
 
   const filteredFavorites = searchQuery
     ? [...favorites].filter((pair) =>

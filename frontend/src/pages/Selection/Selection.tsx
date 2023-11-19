@@ -50,12 +50,35 @@ const ExchangeRateList = () => {
     fetchRates()
   }, [])
 
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (userEmail) {
+        try {
+          const url = `http://localhost:8080/rates/favorites/${(userEmail)}`;
+          const response = await fetch(url);
+          if (response.status === 200) {
+            const favoritePairs = await response.json();
+          const formattedPairs = favoritePairs.map((pair: string) => pair.replace('EUR-', ''));
+          setFavorites(new Set(formattedPairs));
+          } else {
+            console.log('Error fetching favorites');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+    };
+  
+    fetchFavorites();
+  }, [userEmail]);
+  
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value.toLowerCase())
   }
 
   const addToFavorites = (pair: string) => {
-    pair = "EUR-" + pair;
+    const currencyCode: string = "EUR-" + pair;
     // console.log('Adding to favorites:', pair);
     if (!userEmail) {
       console.log("User is not logged in");
@@ -68,7 +91,7 @@ const ExchangeRateList = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: userEmail, currencyCode: pair }),
+      body: JSON.stringify({ email: userEmail, currencyCode: currencyCode }),
     })
     .then(response => {
       // console.log(response);
@@ -87,10 +110,36 @@ const ExchangeRateList = () => {
   };
 
   const removeFromFavorites = (pair: string) => {
-    const updatedFavorites = new Set(favorites)
-    updatedFavorites.delete(pair)
-    setFavorites(updatedFavorites)
-  }
+    const updatedFavorites = new Set(favorites);
+
+    const currencyCode: string = "EUR-" + pair;
+  
+    if (!userEmail) {
+      console.log("User is not logged in");
+      return;
+    }
+  
+    const url = `http://localhost:8080/rates/favorites`;
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: userEmail, currencyCode: currencyCode }),
+    })
+    .then(response => {
+      if (response.status === 200) {
+        console.log(`Removed ${pair} from favorites`);
+        updatedFavorites.delete(pair);
+        setFavorites(updatedFavorites);
+      } else {
+        console.log('Error removing from favorites');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  };
 
   const handleClose = () => {
     setOpen(false)

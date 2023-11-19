@@ -30,6 +30,7 @@ async function createNewAccountObject (account: accountRepositoryRequest): Promi
       password: hash,
       firstName: account.firstName,
       lastName: account.lastName,
+      favoriteCurrencies: '',
       bornDate
     })
   }).catch((err: Error) => {

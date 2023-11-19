@@ -346,7 +346,7 @@ router.delete('/rates/favorites', async (req, res): Promise<void> => {
 }
 )
 
-router.get('/rates/favorites', async (req, res): Promise<void> => {
+router.get('/rates/favorites/:email', async (req, res): Promise<void> => {
   /**
  * @swagger
  * /rates/favorites:
@@ -357,7 +357,7 @@ router.get('/rates/favorites', async (req, res): Promise<void> => {
  *     description: Get favorite currencies from favorites.json, given the user's email.
  *     parameters:
  *       - name: email
- *         in: body
+ *         in: params
  *         required: true
  *         type: string
  *         description: The email of the user.
@@ -369,7 +369,7 @@ router.get('/rates/favorites', async (req, res): Promise<void> => {
  */
 
   try {
-    const email: string = req.body.email
+    const email: string = req.params.email
     // get the favorites.json file
     const favorites: any = fs.readFileSync('./src/config/ratesData/favorites.json', 'utf-8')
     const parsedFavorites: any = JSON.parse(favorites)

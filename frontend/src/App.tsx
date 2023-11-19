@@ -1,54 +1,45 @@
 // App.tsx
-import React from 'react'
-
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-
-import CurrencyConverter from 'pages/Converter/Converter'
-import Favorite from 'pages/Favorite/Favorite'
-import { PageExample } from 'pages/PageExample/PageExample'
-import { PageNotFound } from 'pages/PageNotFound/PageNotFound'
-import Selection from 'pages/Selection/Selection'
-import SignIn from 'pages/sign-in/SignIn'
-import SignUp from 'pages/sign-up/SignUp'
-
-import { AuthProvider } from 'components/AuthContext'
-import ProtectedRoute from 'components/ProtectedRoute'
-
-import Header from './components/Header'
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import CurrencyConverter from 'pages/Converter/Converter';
+import Favorite from 'pages/Favorite/Favorite';
+import { PageExample } from 'pages/PageExample/PageExample';
+import { PageNotFound } from 'pages/PageNotFound/PageNotFound';
+import Selection from 'pages/Selection/Selection';
+import SignIn from 'pages/sign-in/SignIn';
+import SignUp from 'pages/sign-up/SignUp';
+import Header from './components/Header';
+import test_selection from 'pages/Test_selection/test_selection';
 
 const pathToNode: Array<{ path: string, Element: any }> = [
-  { path: '/', Element: PageExample },
+  { path: '/selection', Element: Selection },
+  { path: '/test_selection', Element: test_selection },
   { path: '/example', Element: PageExample },
-
+  { path: '/sign-in', Element: SignIn },
+  { path: '/sign-up', Element: SignUp },
   { path: '/converter/:currencyPair', Element: CurrencyConverter },
-
   { path: '/favorite', Element: Favorite },
-  { path: '/selection', Element: Selection }
-]
+];
 
-function App () {
+function App() {
+  const fakeUser = {
+    name: 'Jane Doe',
+    profilePicture: '/path-to-profile-picture.jpg', // replace with the actual path to the image
+  };
+
   return (
-    <AuthProvider>
-      <div className={'App'}>
-        <BrowserRouter>
-          <Header/>
-          <Routes>
-            {pathToNode.map(({ path, Element }, index) => (
-              <Route key={index} path={path} element={
-                <ProtectedRoute>
-                  <Element/>
-                </ProtectedRoute>
-              }
-              />
-            ))}
-            <Route path={'/sign-in'} element={<SignIn/>}/>
-            <Route path={'/sign-up'} element={<SignUp/>}/>
-            <Route path={'*'} element={<PageNotFound/>}/>
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </AuthProvider>
-  )
+    <div className={'App'}>
+      <BrowserRouter>
+        <Header user={fakeUser} />
+        <Routes>
+          {pathToNode.map(({ path, Element }, index) => (
+            <Route key={index} path={path} element={<Element />} />
+          ))}
+          <Route path={'*'} element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
-export default App
+export default App;

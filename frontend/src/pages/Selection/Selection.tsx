@@ -1,162 +1,178 @@
-import React, { useState } from 'react'
-
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import SearchIcon from '@mui/icons-material/Search'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  IconButton,
-  Typography,
-  InputBase,
+  Box,
   Card,
   CardContent,
   CardMedia,
-  Box,
+  Typography,
+  IconButton,
+  InputBase,
   Snackbar,
-  type AlertColor
-} from '@mui/material'
-import MuiAlert, { type AlertProps } from '@mui/material/Alert'
-import { Link } from 'react-router-dom'
+} from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import SearchIcon from '@mui/icons-material/Search';
+import Alert from '@mui/material/Alert';
+import Curve from 'assets/images/curve.png' // Replace with the actual path
+type SnackbarSeverity = 'error' | 'success' | 'info' | 'warning';
 
-import Curve from 'assets/images/curve.png'
+const ExchangeRateList = () => {
+  const [rates, setRates] = useState<any>({}); // You can replace 'any' with the correct type
+  const [base, setBase] = useState<string>(''); // Assuming 'base' is a string
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert (
-  props,
-  ref
-) {
-  return <MuiAlert elevation={6} ref={ref} variant={'filled'} {...props}/>
-})
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [favorites, setFavorites] = useState(new Set());
+  const [open, setOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<SnackbarSeverity>('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
-// Sample data for currency pairs
-const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB', 'VND-EUR', 'HUF-EUR']
+  useEffect(() => {
+    const fetchRates = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/rates');
+        const data = await response.json();
+        console.log('Rates response:', data);
+        setRates(data.rates);
+        setBase(data.base);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching rates:', error);
+      }
+    };
 
-const Selection = () => {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [favorites, setFavorites] = useState(new Set())
-
-  const [open, setOpen] = React.useState(false)
-
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setOpen(false)
-  }
-
-  const [snackbarMessage, setSnackbarMessage] = useState('')
-  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success')
+    fetchRates();
+  }, []);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value)
-  }
+    setSearchQuery(event.target.value.toLowerCase());
+  };
+  
 
   const addToFavorites = (pair: string) => {
-    setFavorites(new Set(favorites).add(pair))
-    setSnackbarMessage(`Added ${pair} to favorites.`)
-    setSnackbarSeverity('success')
-    setOpen(true)
-    // call add to favorites endpoint
-  }
+    setFavorites(new Set(favorites).add(pair));
+    setSnackbarSeverity('success');
+    setSnackbarMessage(`Added ${pair} to favorites`);
+  };
 
   const removeFromFavorites = (pair: string) => {
-    const newFavorites = new Set(favorites)
-    newFavorites.delete(pair)
-    setFavorites(newFavorites)
-    setSnackbarMessage(`Removed ${pair} from favorites.`)
-    setSnackbarSeverity('warning')
-    setOpen(true)
-    // call add to favorites endpoint
-  }
+    const updatedFavorites = new Set(favorites);
+    updatedFavorites.delete(pair);
+    setFavorites(updatedFavorites);
+  };
+  
 
-  const filteredCurrencyPairs = searchQuery
-    ? currencyPairs.filter((pair) =>
-      pair.toLowerCase().includes(searchQuery)
-    )
-    : currencyPairs
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const renderCurrencyPairs = () => {
+    if (loading) {
+      return <p>Loading...</p>;
+    }
+
+    const filteredCurrencyPairs = Object.entries(rates).filter(([currencyCode]) =>
+      currencyCode.toLowerCase().includes(searchQuery)
+    );
+
+
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'flex-start',
+          maxWidth: '1280px',
+          width: '100%',
+        }}
+      >
+        {filteredCurrencyPairs.map(([pair, base], index) => (
+          <Link
+          key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Card sx={{ maxWidth: 345, m: 2 }}>
+              <CardMedia
+                component="img"
+                height={140}
+                image={Curve}
+                alt="Trading Curve"
+                sx={{ filter: 'blur(5px)' }}
+              />
+              <CardContent
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography variant="h5" component="h2">
+                <>
+                  EUR-{pair}
+                </>
+                </Typography>
+                <IconButton
+                  onClick={() => {
+                    favorites.has(pair)
+                      ? removeFromFavorites(pair)
+                      : addToFavorites(pair);
+                  }}
+                >
+                  {favorites.has(pair) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                </IconButton>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
+      </Box>
+    );
+  };
 
   return (
-    <>
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'relative',
-        borderRadius: 1,
-        backgroundColor: 'common.white',
-        marginLeft: 0,
-        width: '100%',
-        height: '50px'
-      }}
+    <div>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'relative',
+          borderRadius: 1,
+          backgroundColor: 'common.white',
+          marginLeft: 0,
+          width: '100%',
+          height: '50px',
+        }}
       >
-        <SearchIcon sx={{ color: 'inherit' }}/>
+        <SearchIcon sx={{ color: 'inherit' }} />
         <InputBase
           placeholder={'Search…'}
           sx={{
             color: 'inherit',
             padding: '8px 8px 8px 0',
             paddingLeft: 'calc(1em + 32px)',
-            width: '50%'
+            width: '50%',
           }}
           inputProps={{ 'aria-label': 'search' }}
           onChange={handleSearchChange}
         />
       </Box>
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'center'
-      }}
-      >
-        <Box sx={{
+      <Box
+        sx={{
           display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'flex-start',
-          maxWidth: '1280px',
-          width: '100%'
+          justifyContent: 'center',
         }}
-        >
-          {filteredCurrencyPairs.map((pair) => (
-
-            <Link
-              key={pair}
-              to={`/converter/${pair}`}
-
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-
-              <Card sx={{
-                maxWidth: 345,
-                m: 2
-              }} key={pair}
-              >
-                <CardMedia
-                  component={'img'}
-                  height={'140'}
-                  image={Curve}
-                  alt={'Trading Curve'}
-                  sx={{
-                    filter: 'blur(5px)'
-                  }}
-                />
-                <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Typography variant={'h5'} component={'h2'}>
-                    {pair}
-                  </Typography>
-                  <IconButton onClick={() => { favorites.has(pair) ? removeFromFavorites(pair) : addToFavorites(pair) }}>
-                    {favorites.has(pair) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
-                  </IconButton>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </Box>
+      >
+        {renderCurrencyPairs()}
       </Box>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default Selection
+export default ExchangeRateList;
+
+
+

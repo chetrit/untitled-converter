@@ -357,7 +357,7 @@ router.get('/rates/favorites', async (req, res): Promise<void> => {
  *     description: Get favorite currencies from favorites.json, given the user's email.
  *     parameters:
  *       - name: email
- *         in: query
+ *         in: body
  *         required: true
  *         type: string
  *         description: The email of the user.

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState } from 'react'
+
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import SearchIcon from '@mui/icons-material/Search'
 import {
   Card,
   CardMedia,
@@ -9,31 +10,32 @@ import {
   IconButton,
   InputBase,
   Box
-} from '@mui/material';
-import Curve from 'assets/images/curve.png'; 
+} from '@mui/material'
 
-const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB'];
+import Curve from 'assets/images/curve.png'
+
+const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB']
 
 const FavoritesPage = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [favorites, setFavorites] = useState(new Set(currencyPairs)); 
+  const [searchQuery, setSearchQuery] = useState('')
+  const [favorites, setFavorites] = useState(new Set(currencyPairs))
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
+    setSearchQuery(event.target.value)
+  }
 
   const removeFromFavorites = (pair: string) => {
-    const newFavorites = new Set(favorites);
-    newFavorites.delete(pair);
-    setFavorites(newFavorites);
+    const newFavorites = new Set(favorites)
+    newFavorites.delete(pair)
+    setFavorites(newFavorites)
     // call to favorites endpoint
-  };
+  }
 
   const filteredFavorites = searchQuery
     ? [...favorites].filter((pair) =>
         pair.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : [...favorites];
+    : [...favorites]
 
   return (
     <>
@@ -90,8 +92,8 @@ const FavoritesPage = () => {
                 <Typography variant={'h5'} component={'div'}>
                   {pair}
                 </Typography>
-                <IconButton onClick={() => removeFromFavorites(pair)}>
-                  <FavoriteIcon />
+                <IconButton onClick={() => { removeFromFavorites(pair) }}>
+                  <FavoriteIcon/>
                 </IconButton>
               </CardContent>
             </Card>
@@ -99,7 +101,7 @@ const FavoritesPage = () => {
         </Box>
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default FavoritesPage;
+export default FavoritesPage

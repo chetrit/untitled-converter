@@ -13,6 +13,9 @@ import Link from '@mui/material/Link'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { useNavigate } from 'react-router-dom'
+
+import { useAuth } from 'components/AuthContext'
 
 function Copyright (props: any) {
   return (
@@ -31,13 +34,36 @@ function Copyright (props: any) {
 const defaultTheme = createTheme()
 
 export default function SignIn () {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const { login } = useAuth()
+  const navigate = useNavigate()
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise <void> => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log({
+
+    const formData = {
       email: data.get('email'),
       password: data.get('password')
-    })
+    }
+
+    try {
+      const response = await fetch('http://localhost:8080/account/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      if (response.status === 200) {
+        login()
+        navigate('/')
+      } else {
+        console.log('Invalid login credentials')
+      }
+    } catch (error) {
+      console.error('There was an error!', error)
+    }
   }
 
   return (
@@ -99,7 +125,7 @@ export default function SignIn () {
               </Grid>
               <Grid item>
                 <Link href={'/sign-up'} variant={'body2'}>
-                  Don't have an account? Sign Up
+                  Don&apos;t have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>

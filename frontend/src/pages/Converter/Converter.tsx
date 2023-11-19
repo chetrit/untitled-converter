@@ -1,89 +1,66 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { Container, TextField, Button, Card, CardContent, Typography } from '@material-ui/core';
+import { Box, CardMedia } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
-import {
-  Container,
-  TextField,
-  MenuItem,
-  Button,
-  Card,
-  CardContent,
-  Typography
-} from '@material-ui/core'
-import { Box, CardMedia } from '@mui/material'
-import { useParams } from 'react-router-dom'
-
-import Curve from 'assets/images/curve.png'
-
-const currencies = [
-  {
-    value: 'USD',
-    label: 'US Dollar'
-  },
-  {
-    value: 'EUR',
-    label: 'Euro'
-  },
-  {
-    value: 'THB',
-    label: 'Thai Bath'
-  },
-  {
-    value: 'RON',
-    label: 'Romanian Lei'
-  },
-  {
-    value: 'HUF',
-    label: 'Hungarian Forint'
-  },
-  {
-    value: 'JPY',
-    label: 'Japanese Yen'
-  },
-  {
-    value: 'VND',
-    label: 'Đồng Việt Nam'
-  },
-  {
-    value: 'GBP',
-    label: 'British pound'
-  }
-  // ... add other currencies as needed
-]
+import Curve from 'assets/images/curve.png';
 
 const CurrencyConverter = () => {
-  // Use the useParams hook to get the entire currency pair string
-  const { currencyPair = '' } = useParams<{ currencyPair?: string }>()
+  const { currencyPair = '' } = useParams<{ currencyPair?: string }>();
+  const [fromCurrency, toCurrency] = currencyPair.split('-');
 
-  // Split the currency pair into fromCurrency and toCurrency
-  const [fromCurrency, toCurrency] = currencyPair.split('-')
-
-  const [amount, setAmount] = useState('')
-  const [convertedAmount, setConvertedAmount] = useState('')
+  const [amount, setAmount] = useState('');
+  const [convertedAmount, setConvertedAmount] = useState('');
+  const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    // You can use the values of fromCurrency and toCurrency here
-    console.log('From Currency:', fromCurrency)
-    console.log('To Currency:', toCurrency)
+    const fetchRates = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/rates');
+        const data = await response.json();
+        console.log('Rates response:', data);
+        setExchangeRates(data.rates);
+      } catch (error) {
+        console.error('Error fetching rates:', error);
+      }
+    };
 
-    // You would use an API call here to get real-time conversion rates
-  }, [fromCurrency, toCurrency])
+    fetchRates();
+  }, []);
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(event.target.value)
-  }
+    setAmount(event.target.value);
+  };
 
   const handleFromCurrencyChange = () => {
-    // No need to handle changes for 'From' currency in this case
-  }
+    // You can add logic here to handle changes in the 'From' currency if needed
+  };
 
   const handleToCurrencyChange = () => {
-    // No need to handle changes for 'To' currency in this case
-  }
+    // You can add logic here to handle changes in the 'To' currency if needed
+  };
 
   const convertCurrency = () => {
-    // Here you would call the conversion API to convert the currency
-    // and then set the converted amount with setConvertedAmount
-  }
+    if (!amount || !fromCurrency || !toCurrency || !exchangeRates) {
+      // If any required data is missing, don't proceed with conversion
+      return;
+    }
+
+    const fromRate = exchangeRates[fromCurrency];
+    const toRate = exchangeRates[toCurrency];
+
+    if (!fromRate || !toRate) {
+      console.error('Exchange rates not available for conversion.');
+      return;
+    }
+
+    const convertedAmountValue = (parseFloat(amount) / fromRate) * toRate;
+
+    // Round the result to 2 decimal places
+    const roundedConvertedAmount = Math.round(convertedAmountValue * 100) / 100;
+
+    setConvertedAmount(roundedConvertedAmount.toString());
+  };
 
   return (
     <Container maxWidth={'lg'}>
@@ -96,7 +73,7 @@ const CurrencyConverter = () => {
           marginTop: '5%',
           marginBottom: '5%',
           borderRadius: '10px',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         }}
       >
         <CardMedia
@@ -105,7 +82,7 @@ const CurrencyConverter = () => {
           image={Curve}
           alt={'Trading Curve'}
           sx={{
-            filter: 'blur(5px)'
+            filter: 'blur(5px)',
           }}
         />
       </Box>
@@ -129,7 +106,7 @@ const CurrencyConverter = () => {
             fullWidth
             margin={'normal'}
             InputProps={{
-              readOnly: true
+              readOnly: true,
             }}
           />
           <TextField
@@ -138,15 +115,10 @@ const CurrencyConverter = () => {
             fullWidth
             margin={'normal'}
             InputProps={{
-              readOnly: true
+              readOnly: true,
             }}
           />
-          <Button
-            variant={'contained'}
-            color={'primary'}
-            onClick={convertCurrency}
-            fullWidth
-          >
+          <Button variant={'contained'} color={'primary'} onClick={convertCurrency} fullWidth>
             Convert
           </Button>
 
@@ -158,7 +130,7 @@ const CurrencyConverter = () => {
         </CardContent>
       </Card>
     </Container>
-  )
-}
+  );
+};
 
-export default CurrencyConverter
+export default CurrencyConverter;

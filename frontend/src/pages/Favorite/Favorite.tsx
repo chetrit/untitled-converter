@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-
+import { Link } from 'react-router-dom'
+import { colors } from '@material-ui/core'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import SearchIcon from '@mui/icons-material/Search'
 import {
@@ -15,7 +16,6 @@ import {
 import { useAuth } from 'components/AuthContext'
 
 import Curve from 'assets/images/curve.png'
-import { colors } from '@material-ui/core'
 
 const currencyPairs = ['USD-EUR', 'JPY-USD', 'GBP-USD', 'AUD-CAD', 'EUR-THB']
 
@@ -25,55 +25,52 @@ const FavoritesPage = () => {
   const { userEmail } = useAuth() // Récupérer l'email de l'utilisateur connecté
 
   useEffect(() => {
-    console.log('Fetching favorites for:', userEmail);
+    console.log('Fetching favorites for:', userEmail)
     if (userEmail) {
-      const url = `http://localhost:8080/rates/favorites/${(userEmail)}`;
-      console.log('URL:', url);
+      const url = `http://localhost:8080/rates/favorites/${(userEmail)}`
+      console.log('URL:', url)
       fetch(url)
         .then(response => response.json())
         .then(data => {
-          setFavorites(new Set(data));
+          setFavorites(new Set(data))
         })
-        .catch(error => console.error('Error fetching favorites:', error));
+        .catch(error => { console.error('Error fetching favorites:', error) })
     }
-  }, [userEmail]);
-  
-  
+  }, [userEmail])
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value)
   }
 
   const removeFromFavorites = (pair: string) => {
-    const updatedFavorites = new Set(favorites);
-  
+    const updatedFavorites = new Set(favorites)
+
     if (!userEmail) {
-      console.log("User is not logged in");
-      return;
+      console.log('User is not logged in')
+      return
     }
-  
-    const url = `http://localhost:8080/rates/favorites`;
+
+    const url = 'http://localhost:8080/rates/favorites'
     fetch(url, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: userEmail, currencyCode: pair }),
+      body: JSON.stringify({ email: userEmail, currencyCode: pair })
     })
-    .then(response => {
-      if (response.status === 200) {
-        console.log(`Removed ${pair} from favorites`);
-        updatedFavorites.delete(pair);
-        setFavorites(updatedFavorites);
-      } else {
-        console.log('Error removing from favorites');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  };
-  
+      .then(response => {
+        if (response.status === 200) {
+          console.log(`Removed ${pair} from favorites`)
+          updatedFavorites.delete(pair)
+          setFavorites(updatedFavorites)
+        } else {
+          console.log('Error removing from favorites')
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error)
+      })
+  }
 
   const filteredFavorites = searchQuery
     ? [...favorites].filter((pair) =>
@@ -123,6 +120,9 @@ const FavoritesPage = () => {
         >
           {filteredFavorites.map((pair) => (
             <Card sx={{ maxWidth: 345, m: 2 }} key={pair}>
+              <Link
+              key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}
+            >
               <CardMedia
                 component={'img'}
                 height={'140'}
@@ -132,6 +132,7 @@ const FavoritesPage = () => {
                   filter: 'blur(5px)'
                 }}
               />
+              </Link>
               <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant={'h5'} component={'div'}>
                   {pair}

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 
-import { useAuth } from 'components/AuthContext';
-
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import SearchIcon from '@mui/icons-material/Search'
@@ -18,13 +16,15 @@ import {
 import Alert from '@mui/material/Alert'
 import { Link } from 'react-router-dom'
 
+import { useAuth } from 'components/AuthContext'
+
 import Curve from 'assets/images/curve.png' // Replace with the actual path
 type SnackbarSeverity = 'error' | 'success' | 'info' | 'warning'
 
 const ExchangeRateList = () => {
   const [rates, setRates] = useState<any>({}) // You can replace 'any' with the correct type
   const [base, setBase] = useState<string>('') // Assuming 'base' is a string
-  const { userEmail } = useAuth();
+  const { userEmail } = useAuth()
 
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -54,92 +54,91 @@ const ExchangeRateList = () => {
     const fetchFavorites = async () => {
       if (userEmail) {
         try {
-          const url = `http://localhost:8080/rates/favorites/${(userEmail)}`;
-          const response = await fetch(url);
+          const url = `http://localhost:8080/rates/favorites/${(userEmail)}`
+          const response = await fetch(url)
           if (response.status === 200) {
-            const favoritePairs = await response.json();
-          const formattedPairs = favoritePairs.map((pair: string) => pair.replace('EUR-', ''));
-          setFavorites(new Set(formattedPairs));
+            const favoritePairs = await response.json()
+            const formattedPairs = favoritePairs.map((pair: string) => pair.replace('EUR-', ''))
+            setFavorites(new Set(formattedPairs))
           } else {
-            console.log('Error fetching favorites');
+            console.log('Error fetching favorites')
           }
         } catch (error) {
-          console.error('Error:', error);
+          console.error('Error:', error)
         }
       }
-    };
-  
-    fetchFavorites();
-  }, [userEmail]);
-  
+    }
+
+    fetchFavorites()
+  }, [userEmail])
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value.toLowerCase())
   }
 
   const addToFavorites = (pair: string) => {
-    const currencyCode: string = "EUR-" + pair;
+    const currencyCode: string = 'EUR-' + pair
     // console.log('Adding to favorites:', pair);
     if (!userEmail) {
-      console.log("User is not logged in");
-      return;
+      console.log('User is not logged in')
+      return
     }
 
-    const url = `http://localhost:8080/rates/favorites`;
+    const url = 'http://localhost:8080/rates/favorites'
     fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: userEmail, currencyCode: currencyCode }),
+      body: JSON.stringify({ email: userEmail, currencyCode })
     })
-    .then(response => {
+      .then(response => {
       // console.log(response);
-      if (response.status === 200) {
-        setFavorites(new Set(favorites).add(pair));
-        setSnackbarSeverity('success');
-        setSnackbarMessage(`Added ${pair} to favorites`);
-      } else {
+        if (response.status === 200) {
+          setFavorites(new Set(favorites).add(pair))
+          setSnackbarSeverity('success')
+          setSnackbarMessage(`Added ${pair} to favorites`)
+        } else {
         // Gérer les erreurs
-        console.log('Error adding to favorites');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  };
+          console.log('Error adding to favorites')
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error)
+      })
+  }
 
   const removeFromFavorites = (pair: string) => {
-    const updatedFavorites = new Set(favorites);
+    const updatedFavorites = new Set(favorites)
 
-    const currencyCode: string = "EUR-" + pair;
-  
+    const currencyCode: string = 'EUR-' + pair
+
     if (!userEmail) {
-      console.log("User is not logged in");
-      return;
+      console.log('User is not logged in')
+      return
     }
-  
-    const url = `http://localhost:8080/rates/favorites`;
+
+    const url = 'http://localhost:8080/rates/favorites'
     fetch(url, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: userEmail, currencyCode: currencyCode }),
+      body: JSON.stringify({ email: userEmail, currencyCode })
     })
-    .then(response => {
-      if (response.status === 200) {
-        console.log(`Removed ${pair} from favorites`);
-        updatedFavorites.delete(pair);
-        setFavorites(updatedFavorites);
-      } else {
-        console.log('Error removing from favorites');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-  };
+      .then(response => {
+        if (response.status === 200) {
+          console.log(`Removed ${pair} from favorites`)
+          updatedFavorites.delete(pair)
+          setFavorites(updatedFavorites)
+        } else {
+          console.log('Error removing from favorites')
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error)
+      })
+  }
 
   const handleClose = () => {
     setOpen(false)
@@ -165,10 +164,10 @@ const ExchangeRateList = () => {
         }}
       >
         {filteredCurrencyPairs.map(([pair, base], index) => (
-          // <Link
-          //   key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}
-          // >
-            <Card sx={{ maxWidth: 345, m: 2 }}>
+          <Card sx={{ maxWidth: 345, m: 2 }}>
+            <Link
+              key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}
+            >
               <CardMedia
                 component={'img'}
                 height={140}
@@ -176,30 +175,31 @@ const ExchangeRateList = () => {
                 alt={'Trading Curve'}
                 sx={{ filter: 'blur(5px)' }}
               />
-              <CardContent
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
+            </Link>
+            <CardContent
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              <Typography variant={'h5'} component={'h2'}>
+                <>
+                  EUR-{pair}
+                </>
+              </Typography>
+              <IconButton
+                onClick={() => {
+                  favorites.has(pair)
+                    ? removeFromFavorites(pair)
+                    : addToFavorites(pair)
                 }}
               >
-                <Typography variant={'h5'} component={'h2'}>
-                  <>
-                    EUR-{pair}
-                  </>
-                </Typography>
-                <IconButton
-                  onClick={() => {
-                    favorites.has(pair)
-                      ? removeFromFavorites(pair)
-                      : addToFavorites(pair)
-                  }}
-                >
-                  {favorites.has(pair) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
-                </IconButton>
-              </CardContent>
-            </Card>
-          //</Link>
+                {favorites.has(pair) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+              </IconButton>
+            </CardContent>
+          </Card>
+          // </Link>
         ))}
       </Box>
     )

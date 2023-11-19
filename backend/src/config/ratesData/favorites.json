@@ -13,7 +13,9 @@
   "test3@mail.com": [
     "eur-dkk"
   ],
-  "oui@oui.com": [],
+  "oui@oui.com": [
+    "EUR-AOA"
+  ],
   "undefined": [
     null
   ]

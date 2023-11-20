@@ -28,6 +28,7 @@ module.exports = {
     'no-unused-vars': ['warn', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
     '@typescript-eslint/no-unused-vars': ['warn', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-misused-promises': 'off',
     'object-curly-spacing': ['error', 'always'],
     '@typescript-eslint/no-non-null-assertion': 'off',
     'import-helpers/order-imports': [

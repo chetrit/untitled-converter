@@ -1,0 +1,22 @@
+{
+  "test@mail.com": [
+    "usd-dkk",
+    "dkk-usd",
+    "eur-usd",
+    "usd-eur",
+    "test",
+    "test"
+  ],
+  "test2@mail.com": [
+    "test"
+  ],
+  "test3@mail.com": [
+    "eur-dkk"
+  ],
+  "oui@oui.com": [
+    "EUR-AOA"
+  ],
+  "undefined": [
+    null
+  ]
+}

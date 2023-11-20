@@ -17,7 +17,13 @@ const CurrencyConverter = () => {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/rates`)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/rates`, {
+          headers: {
+            'Content-Type': 'application/json',
+            credentials: 'include',
+            'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
+          }
+        })
         const data = await response.json()
         console.log('Rates response:', data)
         setExchangeRates(data.rates)

@@ -30,7 +30,13 @@ const FavoritesPage = () => {
     if (userEmail) {
       const url = `${process.env.REACT_APP_BACKEND_URL!}/rates/favorites/${userEmail}`
       console.log('URL:', url)
-      fetch(url)
+      fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          credentials: 'include',
+          'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
+        }
+      })
         .then(response => response.json())
         .then(data => {
           setFavorites(new Set(data))
@@ -55,7 +61,9 @@ const FavoritesPage = () => {
     fetch(url, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        credentials: 'include',
+        'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
       },
       body: JSON.stringify({ email: userEmail, currencyCode: pair })
     })

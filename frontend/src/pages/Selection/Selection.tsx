@@ -37,7 +37,13 @@ const ExchangeRateList = () => {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/rates`)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/rates`, {
+          headers: {
+            'Content-Type': 'application/json',
+            credentials: 'include',
+            'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
+          }
+        })
         const data = await response.json()
         console.log('Rates response:', data)
         setRates(data.rates)
@@ -56,7 +62,13 @@ const ExchangeRateList = () => {
       if (userEmail) {
         try {
           const url = `${process.env.REACT_APP_BACKEND_URL!}/rates/favorites/${userEmail}`
-          const response = await fetch(url)
+          const response = await fetch(url, {
+            headers: {
+              'Content-Type': 'application/json',
+              credentials: 'include',
+              'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
+            }
+          })
           if (response.status === 200) {
             const favoritePairs = await response.json()
             const formattedPairs = favoritePairs.map((pair: string) => pair.replace('EUR-', ''))
@@ -89,7 +101,9 @@ const ExchangeRateList = () => {
     fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        credentials: 'include',
+        'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
       },
       body: JSON.stringify({ email: userEmail, currencyCode })
     })
@@ -123,7 +137,9 @@ const ExchangeRateList = () => {
     fetch(url, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        credentials: 'include',
+        'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
       },
       body: JSON.stringify({ email: userEmail, currencyCode })
     })

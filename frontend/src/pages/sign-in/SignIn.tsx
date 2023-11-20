@@ -35,7 +35,9 @@ export default function SignIn () {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/account/login`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          credentials: 'include',
+          'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
         },
         body: JSON.stringify(formData)
       })

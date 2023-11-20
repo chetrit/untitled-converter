@@ -165,7 +165,7 @@ const ExchangeRateList = () => {
         }}
       >
         {filteredCurrencyPairs.map(([pair, base], index) => (
-          <Card sx={{ maxWidth: 345, m: 2 }} key={index}>
+          <Card id={`currency-card-${index}`} sx={{ maxWidth: 345, m: 2 }} key={index}>
             <Link
               key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}
             >

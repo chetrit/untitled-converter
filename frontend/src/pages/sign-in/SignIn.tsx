@@ -92,6 +92,7 @@ export default function SignIn () {
               autoComplete={'current-password'}
             />
             <Button
+              id={'signIn_button'}
               type={'submit'}
               fullWidth
               variant={'contained'}

@@ -95,6 +95,7 @@ const CurrencyConverter = () => {
           </Typography>
 
           <TextField
+            id={'amount_filed'}
             label={'Amount'}
             value={amount}
             onChange={handleAmountChange}
@@ -119,7 +120,7 @@ const CurrencyConverter = () => {
               readOnly: true
             }}
           />
-          <Button variant={'contained'} color={'primary'} onClick={convertCurrency} fullWidth>
+          <Button id={'convert_button'} variant={'contained'} color={'primary'} onClick={convertCurrency} fullWidth>
             Convert
           </Button>
 

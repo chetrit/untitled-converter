@@ -53,11 +53,11 @@ const Header: React.FC = () => {
         <Button color={'inherit'} startIcon={<FavoriteBorderIcon/>} onClick={handleFavoritesClick} sx={{ marginLeft: 1 }}>
           Favorites
         </Button>
-        <Button color={'inherit'} startIcon={<CurrencyExchangeIcon/>} onClick={handleAllCurrenciesClick}>
+        <Button id={'allCurrencies_button'} color={'inherit'} startIcon={<CurrencyExchangeIcon/>} onClick={handleAllCurrenciesClick}>
           All Currencies
         </Button>
         <Box sx={{ flexGrow: 1 }}/>
-        <button onClick={handleLogout}>Logout</button>
+        <button id={'logout_button'} onClick={handleLogout}>Logout</button>
       </Toolbar>
     </AppBar>
   )

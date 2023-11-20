@@ -28,7 +28,7 @@ const FavoritesPage = () => {
   useEffect(() => {
     console.log('Fetching favorites for:', userEmail)
     if (userEmail) {
-      const url = `http://localhost:8080/rates/favorites/${userEmail}`
+      const url = `${process.env.REACT_APP_BACKEND_URL!}/rates/favorites/${userEmail}`
       console.log('URL:', url)
       fetch(url)
         .then(response => response.json())
@@ -51,7 +51,7 @@ const FavoritesPage = () => {
       return
     }
 
-    const url = 'http://localhost:8080/rates/favorites'
+    const url = `${process.env.REACT_APP_BACKEND_URL!}/rates/favorites`
     fetch(url, {
       method: 'DELETE',
       headers: {

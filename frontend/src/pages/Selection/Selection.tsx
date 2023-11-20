@@ -85,7 +85,7 @@ const ExchangeRateList = () => {
       return
     }
 
-    const url = `${process.env.REACT_APP_BACKEND_URL!}rates/favorites`
+    const url = `${process.env.REACT_APP_BACKEND_URL!}/rates/favorites`
     fetch(url, {
       method: 'POST',
       headers: {

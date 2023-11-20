@@ -4,10 +4,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Checkbox from '@mui/material/Checkbox'
 import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import Grid from '@mui/material/Grid'
 import Link from '@mui/material/Link'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -16,19 +14,6 @@ import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from 'components/AuthContext'
-
-function Copyright (props: any) {
-  return (
-    <Typography variant={'body2'} color={'text.secondary'} align={'center'} {...props}>
-      {'Copyright © '}
-      <Link color={'inherit'} href={'https://mui.com/'}>
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      .
-    </Typography>
-  )
-}
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme()
@@ -54,7 +39,9 @@ export default function SignUp () {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/account/signup`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          credentials: 'include',
+          'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
         },
         body: JSON.stringify(formData)
       })
@@ -146,14 +133,10 @@ export default function SignUp () {
                   autoComplete={'new-password'}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value={'allowExtraEmails'} color={'primary'}/>}
-                  label={'I want to receive inspiration, marketing promotions and updates via email.'}
-                />
-              </Grid>
+
             </Grid>
             <Button
+              id={'signUp_button'}
               type={'submit'}
               fullWidth
               variant={'contained'}
@@ -170,7 +153,6 @@ export default function SignUp () {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }}/>
       </Container>
     </ThemeProvider>
   )

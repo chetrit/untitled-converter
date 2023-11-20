@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.10.7 on win32)" generated="20231120 18:42:40.653" rpa="false" schemaversion="4">
+<suite id="s1" name="Signup" source="C:\Users\uzene\Documents\GitHub\untitled-converter\signup.robot">
+<test id="s1-t1" name="1. Open Website Chrome" line="12">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>${url}</arg>
+<arg>${Browser}</arg>
+<arg>options=add_experimental_option('excludeSwitches', ['enable-logging'])</arg>
+<arg>executable_path=${chrome_driver_path}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20231120 18:42:41.235" level="INFO">Opening browser 'Chrome' to base url 'http://localhost:3000'.</msg>
+<status status="PASS" starttime="20231120 18:42:41.231" endtime="20231120 18:42:43.812"/>
+</kw>
+<kw name="Set Selenium Speed" library="SeleniumLibrary">
+<arg>0.1</arg>
+<doc>Sets the delay that is waited after each Selenium command.</doc>
+<status status="PASS" starttime="20231120 18:42:43.813" endtime="20231120 18:42:43.813"/>
+</kw>
+<status status="PASS" starttime="20231120 18:42:41.229" endtime="20231120 18:42:43.815"/>
+</test>
+<test id="s1-t2" name="2. Go to signUp page" line="15">
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>xpath=(/html/body/div/div/main/div/form/div/div/a)</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20231120 18:42:43.821" level="INFO">Clicking element 'xpath=(/html/body/div/div/main/div/form/div/div/a)'.</msg>
+<status status="PASS" starttime="20231120 18:42:43.819" endtime="20231120 18:42:44.732"/>
+</kw>
+<status status="PASS" starttime="20231120 18:42:43.818" endtime="20231120 18:42:44.733"/>
+</test>
+<test id="s1-t3" name="3. Input username, password and email" line="17">
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=firstName</arg>
+<arg>mickey</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20231120 18:42:44.738" level="INFO">Typing text 'mickey' into text field 'id=firstName'.</msg>
+<status status="PASS" starttime="20231120 18:42:44.737" endtime="20231120 18:42:45.200"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=lastName</arg>
+<arg>mouse</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20231120 18:42:45.202" level="INFO">Typing text 'mouse' into text field 'id=lastName'.</msg>
+<status status="PASS" starttime="20231120 18:42:45.201" endtime="20231120 18:42:45.668"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=email</arg>
+<arg>mickey.mouse@gmail.com</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20231120 18:42:45.671" level="INFO">Typing text 'mickey.mouse@gmail.com' into text field 'id=email'.</msg>
+<status status="PASS" starttime="20231120 18:42:45.669" endtime="20231120 18:42:46.178"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=password</arg>
+<arg>mickeyMouse</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20231120 18:42:46.179" level="INFO">Typing text 'mickeyMouse' into text field 'id=password'.</msg>
+<status status="PASS" starttime="20231120 18:42:46.178" endtime="20231120 18:42:46.651"/>
+</kw>
+<status status="PASS" starttime="20231120 18:42:44.736" endtime="20231120 18:42:46.652"/>
+</test>
+<test id="s1-t4" name="4. Sign up" line="22">
+<kw name="Click Button" library="SeleniumLibrary">
+<arg>id=signUp_button</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<msg timestamp="20231120 18:42:46.654" level="INFO">Clicking button 'id=signUp_button'.</msg>
+<status status="PASS" starttime="20231120 18:42:46.654" endtime="20231120 18:42:47.271"/>
+</kw>
+<status status="PASS" starttime="20231120 18:42:46.653" endtime="20231120 18:42:47.271"/>
+</test>
+<test id="s1-t5" name="5. Close Browser" line="25">
+<kw name="Sleep" library="BuiltIn">
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20231120 18:42:52.276" level="INFO">Slept 5 seconds</msg>
+<status status="PASS" starttime="20231120 18:42:47.273" endtime="20231120 18:42:52.276"/>
+</kw>
+<kw name="Close Browser" library="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20231120 18:42:52.277" endtime="20231120 18:42:54.467"/>
+</kw>
+<status status="PASS" starttime="20231120 18:42:47.273" endtime="20231120 18:42:54.468"/>
+</test>
+<status status="PASS" starttime="20231120 18:42:40.665" endtime="20231120 18:42:54.471"/>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="5" fail="0" skip="0" id="s1" name="Signup">Signup</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

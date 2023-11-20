@@ -28,9 +28,15 @@ const FavoritesPage = () => {
   useEffect(() => {
     console.log('Fetching favorites for:', userEmail)
     if (userEmail) {
-      const url = `http://localhost:8080/rates/favorites/${userEmail}`
+      const url = `${process.env.REACT_APP_BACKEND_URL!}/rates/favorites/${userEmail}`
       console.log('URL:', url)
-      fetch(url)
+      fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          credentials: 'include',
+          'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
+        }
+      })
         .then(response => response.json())
         .then(data => {
           setFavorites(new Set(data))
@@ -51,11 +57,13 @@ const FavoritesPage = () => {
       return
     }
 
-    const url = 'http://localhost:8080/rates/favorites'
+    const url = `${process.env.REACT_APP_BACKEND_URL!}/rates/favorites`
     fetch(url, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        credentials: 'include',
+        'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
       },
       body: JSON.stringify({ email: userEmail, currencyCode: pair })
     })

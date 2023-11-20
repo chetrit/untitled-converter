@@ -17,7 +17,13 @@ const CurrencyConverter = () => {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/rates`)
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/rates`, {
+          headers: {
+            'Content-Type': 'application/json',
+            credentials: 'include',
+            'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL!}/`
+          }
+        })
         const data = await response.json()
         console.log('Rates response:', data)
         setExchangeRates(data.rates)
@@ -95,6 +101,7 @@ const CurrencyConverter = () => {
           </Typography>
 
           <TextField
+            id={'amount_filed'}
             label={'Amount'}
             value={amount}
             onChange={handleAmountChange}
@@ -119,7 +126,7 @@ const CurrencyConverter = () => {
               readOnly: true
             }}
           />
-          <Button variant={'contained'} color={'primary'} onClick={convertCurrency} fullWidth>
+          <Button id={'convert_button'} variant={'contained'} color={'primary'} onClick={convertCurrency} fullWidth>
             Convert
           </Button>
 

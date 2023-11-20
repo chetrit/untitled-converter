@@ -37,7 +37,7 @@ const ExchangeRateList = () => {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await fetch('http://localhost:8080/rates')
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/rates`)
         const data = await response.json()
         console.log('Rates response:', data)
         setRates(data.rates)
@@ -55,7 +55,7 @@ const ExchangeRateList = () => {
     const fetchFavorites = async () => {
       if (userEmail) {
         try {
-          const url = `http://localhost:8080/rates/favorites/${userEmail}`
+          const url = `${process.env.REACT_APP_BACKEND_URL!}/rates/favorites/${userEmail}`
           const response = await fetch(url)
           if (response.status === 200) {
             const favoritePairs = await response.json()
@@ -85,7 +85,7 @@ const ExchangeRateList = () => {
       return
     }
 
-    const url = 'http://localhost:8080/rates/favorites'
+    const url = `${process.env.REACT_APP_BACKEND_URL!}rates/favorites`
     fetch(url, {
       method: 'POST',
       headers: {
@@ -119,7 +119,7 @@ const ExchangeRateList = () => {
       return
     }
 
-    const url = 'http://localhost:8080/rates/favorites'
+    const url = `${process.env.REACT_APP_BACKEND_URL!}/rates/favorites`
     fetch(url, {
       method: 'DELETE',
       headers: {

@@ -51,7 +51,7 @@ export default function SignUp () {
 
     try {
       console.log('Sending data to backend', formData)
-      const response = await fetch('http://localhost:8080/account/signup', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL!}/account/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

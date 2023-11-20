@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useState, useEffect } from 'react'
 
 import FavoriteIcon from '@mui/icons-material/Favorite'
@@ -47,14 +48,14 @@ const ExchangeRateList = () => {
       }
     }
 
-    fetchRates()
+    fetchRates().catch(console.error)
   }, [])
 
   useEffect(() => {
     const fetchFavorites = async () => {
       if (userEmail) {
         try {
-          const url = `http://localhost:8080/rates/favorites/${(userEmail)}`
+          const url = `http://localhost:8080/rates/favorites/${userEmail}`
           const response = await fetch(url)
           if (response.status === 200) {
             const favoritePairs = await response.json()
@@ -69,7 +70,7 @@ const ExchangeRateList = () => {
       }
     }
 
-    fetchFavorites()
+    fetchFavorites().catch(console.error)
   }, [userEmail])
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,7 +165,7 @@ const ExchangeRateList = () => {
         }}
       >
         {filteredCurrencyPairs.map(([pair, base], index) => (
-          <Card sx={{ maxWidth: 345, m: 2 }}>
+          <Card sx={{ maxWidth: 345, m: 2 }} key={index}>
             <Link
               key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}
             >

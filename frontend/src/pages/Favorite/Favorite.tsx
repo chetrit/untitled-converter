@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { colors } from '@material-ui/core'
+
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import SearchIcon from '@mui/icons-material/Search'
 import {
@@ -12,6 +12,7 @@ import {
   InputBase,
   Box
 } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 import { useAuth } from 'components/AuthContext'
 
@@ -27,7 +28,7 @@ const FavoritesPage = () => {
   useEffect(() => {
     console.log('Fetching favorites for:', userEmail)
     if (userEmail) {
-      const url = `http://localhost:8080/rates/favorites/${(userEmail)}`
+      const url = `http://localhost:8080/rates/favorites/${userEmail}`
       console.log('URL:', url)
       fetch(url)
         .then(response => response.json())
@@ -121,17 +122,17 @@ const FavoritesPage = () => {
           {filteredFavorites.map((pair) => (
             <Card sx={{ maxWidth: 345, m: 2 }} key={pair}>
               <Link
-              key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <CardMedia
-                component={'img'}
-                height={'140'}
-                image={Curve}
-                alt={'Trading Curve'}
-                sx={{
-                  filter: 'blur(5px)'
-                }}
-              />
+                key={pair} to={`/converter/EUR-${pair}`} style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <CardMedia
+                  component={'img'}
+                  height={'140'}
+                  image={Curve}
+                  alt={'Trading Curve'}
+                  sx={{
+                    filter: 'blur(5px)'
+                  }}
+                />
               </Link>
               <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant={'h5'} component={'div'}>

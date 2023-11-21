@@ -359,7 +359,7 @@ router.get('/rates/favorites/:email', logApiRequest, async (req, res): Promise<v
  *     description: Get favorite currencies from favorites.json, given the user's email.
  *     parameters:
  *       - name: email
- *         in: params
+ *         in: path
  *         required: true
  *         type: string
  *         description: The email of the user.

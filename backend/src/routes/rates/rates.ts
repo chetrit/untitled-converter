@@ -351,7 +351,7 @@ router.delete('/rates/favorites', logApiRequest, async (req, res): Promise<void>
 router.get('/rates/favorites/:email', logApiRequest, async (req, res): Promise<void> => {
   /**
  * @swagger
- * /rates/favorites:
+ * /rates/favorites/{email}}:
  *   get:
  *     tags:
  *       - Rates

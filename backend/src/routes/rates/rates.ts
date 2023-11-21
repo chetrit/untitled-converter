@@ -5,13 +5,15 @@ import { promises as fsPromises } from 'fs'
 import * as fs from 'fs'
 import { type Int32 } from 'typeorm'
 
+import logger, { logApiRequest } from '@middlewares/logging'
+
 const router = Router()
 
 router.use(express.json())
 
 router.use(bodyParser.urlencoded({ extended: false })) // Middleware to parse POST data
 
-router.get('/rates', async (req, res): Promise<void> => {
+router.get('/rates', logApiRequest, async (req, res): Promise<void> => {
   /**
  * @swagger
  * /rates:
@@ -52,7 +54,7 @@ router.get('/rates', async (req, res): Promise<void> => {
   }
 })
 
-router.get('/rates/historicRates/:code', async (req, res): Promise<void> => {
+router.get('/rates/historicRates/:code', logApiRequest, async (req, res): Promise<void> => {
   /**
  * @swagger
  * /rates/historicRates/{code}:
@@ -77,7 +79,7 @@ router.get('/rates/historicRates/:code', async (req, res): Promise<void> => {
   try {
     // return json file with rates and dates for the given code
     const code: any = req.params.code
-    console.log('Received code:', code)
+    logger.info('Received code:' + code)
 
     // generate json file
     const historicRates: any = fs.readFileSync('./src/config/ratesData/historicRates.json', 'utf-8')
@@ -97,7 +99,7 @@ router.get('/rates/historicRates/:code', async (req, res): Promise<void> => {
   }
 })
 
-router.delete('/rates/delete/:code', async (req, res): Promise<void> => {
+router.delete('/rates/delete/:code', logApiRequest, async (req, res): Promise<void> => {
   /**
  * @swagger
  * /rates/delete/{code}:
@@ -121,7 +123,7 @@ router.delete('/rates/delete/:code', async (req, res): Promise<void> => {
 
   try {
     const code: any = req.params.code
-    console.log('Received code:', code)
+    logger.info('Received code:', code)
 
     const ratesData: any = fs.readFileSync('./src/config/ratesData/ratesData.json', 'utf-8')
     const customData: any = fs.readFileSync('./src/config/ratesData/customData.json', 'utf-8')
@@ -155,7 +157,7 @@ router.delete('/rates/delete/:code', async (req, res): Promise<void> => {
   }
 })
 
-router.post('/rates', async (req, res): Promise<void> => {
+router.post('/rates', logApiRequest, async (req, res): Promise<void> => {
   /**
  * @swagger
  * /rates:
@@ -195,12 +197,12 @@ router.post('/rates', async (req, res): Promise<void> => {
     const code: string = req.body.code
     const rate: Int32 = req.body.rate
     const symbol: string = req.body.symbol
-    console.log('Received code:', code)
-    console.log('Received rate:', rate)
-    console.log('Received symbol:', symbol)
+    logger.info('Received code:', code)
+    logger.info('Received rate:', rate)
+    logger.info('Received symbol:', symbol)
 
     if (!(code) || !rate || !symbol) {
-      console.log('Missing required data')
+      logger.info('Missing required data')
       res.status(400).json({ message: 'Missing required data' })
       return
     }
@@ -233,7 +235,7 @@ router.post('/rates', async (req, res): Promise<void> => {
 })
 
 // take a string as input and put that in the favorites.json list belonging to the user based on their id
-router.post('/rates/favorites', async (req, res): Promise<void> => {
+router.post('/rates/favorites', logApiRequest, async (req, res): Promise<void> => {
   /**
  * @swagger
  * /rates/favorites:
@@ -267,8 +269,8 @@ router.post('/rates/favorites', async (req, res): Promise<void> => {
   try {
     const email: string = req.body.email
     const currencyCode: string = req.body.currencyCode
-    console.log('Received email:', email)
-    console.log('Received currencyCode:', currencyCode)
+    logger.info('Received email:', email)
+    logger.info('Received currencyCode:', currencyCode)
     // get the favorites.json file
     const favorites: any = fs.readFileSync('./src/config/ratesData/favorites.json', 'utf-8')
     const parsedFavorites: any = JSON.parse(favorites)
@@ -293,7 +295,7 @@ router.post('/rates/favorites', async (req, res): Promise<void> => {
 }
 )
 
-router.delete('/rates/favorites', async (req, res): Promise<void> => {
+router.delete('/rates/favorites', logApiRequest, async (req, res): Promise<void> => {
   /**
  * @swagger
  * /rates/favorites:
@@ -346,10 +348,10 @@ router.delete('/rates/favorites', async (req, res): Promise<void> => {
 }
 )
 
-router.get('/rates/favorites/:email', async (req, res): Promise<void> => {
+router.get('/rates/favorites/:email', logApiRequest, async (req, res): Promise<void> => {
   /**
  * @swagger
- * /rates/favorites:
+ * /rates/favorites/{email}}:
  *   get:
  *     tags:
  *       - Rates
@@ -357,7 +359,7 @@ router.get('/rates/favorites/:email', async (req, res): Promise<void> => {
  *     description: Get favorite currencies from favorites.json, given the user's email.
  *     parameters:
  *       - name: email
- *         in: params
+ *         in: path
  *         required: true
  *         type: string
  *         description: The email of the user.
